@@ -111,7 +111,7 @@ class ImageToPDFConverter:  # Définit une classe pour convertir des images en P
                 792 - new_height
             ) / 2  # Calcule la position y pour centrer l'image.
 
-            pdf.setFillColor(
+            pdf.setFillColorRGB(
                 255, 255, 255
             )  # Définit la couleur de remplissage en blanc.
             pdf.rect(
