@@ -4,6 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 
 class RegistrationApp(App):
       def build(self):
@@ -19,10 +20,10 @@ class RegistrationApp(App):
             self.email_input = TextInput(multiline=False, font_size=18)
             
             password_label = Label(text="Password", font_size=18)
-            self.password_input = TextInput(multiline=False, font_size=18)
+            self.password_input = TextInput(multiline=False, font_size=18, password=True)
             
             confirm_password_label = Label(text="Confirm Password", font_size=18)
-            self.confirm_password_input = TextInput(multiline=False, font_size=18)
+            self.confirm_password_input = TextInput(multiline=False, font_size=18, password=True)
 
             submit_button = Button(text='Register', font_size=18, on_press=self.register)
             
@@ -40,26 +41,29 @@ class RegistrationApp(App):
             return layout
       
       def register(self, instance):
+            
             name = self.name_input.text
             email = self.email_input.text
             password = self.password_input.text
             confirm_password = self.confirm_password_input.text
             
-            if name == "":
-                  self.name_input.text = "Name is required"
-            elif email == "":
-                  self.email_input.text = "Email is required"
-            elif password == "":
-                  self.password_input.text = "Password is required"
-            elif confirm_password == "":
-                  self.confirm_password_input.text = "Confirm Password is required"
+            # message = ""
+            if name.strip() == ' ' or email.strip() == ' ' or password.strip == ' ' or confirm_password.strip == ' ':
+                  message = "Please fill all the fields"
             elif password!= confirm_password:
-                  self.confirm_password_input.text = "Passwords do not match"
+                  message = "Passwords do not match"
+                  
             else:
-                  self.name_input.text = ""
-                  self.email_input.text = ""
-                  self.password_input.text = ""
-                  self.confirm_password_input.text = ""
+                  filename = name + '.txt'
+                  with open(filename, 'w', encoding='utf_8') as file:
+                        file.write('Name: {}\n' .format(name))
+                        file.write('Email: {}\n' .format(email))
+                        file.write('Password: {}\n' .format(password))
+                  message = "Registration successful !\nName: {}\nEmail: {}".format(name, email)
+                  
+
+            popup = Popup(title = "Registration Status", content = Label(text=message), size_hint=(None, None), size=(400, 200))
+            popup.open()
 
 if __name__ == '__main__':
       RegistrationApp().run()
